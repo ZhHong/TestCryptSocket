@@ -18,10 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Socket.cpp">
+    <ClCompile Include="Crypt.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Crypt.cpp">
+    <ClCompile Include="NetWork.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,7 +29,7 @@
     <ClInclude Include="Crypt.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Socket.h">
+    <ClInclude Include="NetWork.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

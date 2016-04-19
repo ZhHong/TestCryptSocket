@@ -788,10 +788,10 @@ Crypt::dhexchange(char *x) {
 
 // base64
 
-char *
-Crypt::base64encode(const uint8_t *text) {
+void
+Crypt::base64encode(const uint8_t *text,char *out) {
 	static const char* encoding = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	size_t sz = 0;
+	size_t sz = 8;
 	//const uint8_t * text = (const uint8_t *)luaL_checklstring(L, 1, &sz);
 	int encode_sz = (sz + 2) / 3 * 4;
 	char tmp[SMALL_CHUNK];
@@ -803,10 +803,10 @@ Crypt::base64encode(const uint8_t *text) {
 	j = 0;
 	for (i = 0; i<(int)sz - 2; i += 3) {
 		uint32_t v = text[i] << 16 | text[i + 1] << 8 | text[i + 2];
-		buffer[j] = encoding[v >> 18];
-		buffer[j + 1] = encoding[(v >> 12) & 0x3f];
-		buffer[j + 2] = encoding[(v >> 6) & 0x3f];
-		buffer[j + 3] = encoding[(v)& 0x3f];
+		out[j] = encoding[v >> 18];
+		out[j + 1] = encoding[(v >> 12) & 0x3f];
+		out[j + 2] = encoding[(v >> 6) & 0x3f];
+		out[j + 3] = encoding[(v)& 0x3f];
 		j += 4;
 	}
 	int padding = sz - i;
@@ -814,21 +814,21 @@ Crypt::base64encode(const uint8_t *text) {
 	switch (padding) {
 	case 1:
 		v = text[i];
-		buffer[j] = encoding[v >> 2];
-		buffer[j + 1] = encoding[(v & 3) << 4];
-		buffer[j + 2] = '=';
-		buffer[j + 3] = '=';
+		out[j] = encoding[v >> 2];
+		out[j + 1] = encoding[(v & 3) << 4];
+		out[j + 2] = '=';
+		out[j + 3] = '=';
 		break;
 	case 2:
 		v = text[i] << 8 | text[i + 1];
-		buffer[j] = encoding[v >> 10];
-		buffer[j + 1] = encoding[(v >> 4) & 0x3f];
-		buffer[j + 2] = encoding[(v & 0xf) << 2];
-		buffer[j + 3] = '=';
+		out[j] = encoding[v >> 10];
+		out[j + 1] = encoding[(v >> 4) & 0x3f];
+		out[j + 2] = encoding[(v & 0xf) << 2];
+		out[j + 3] = '=';
 		break;
 	}
 	//lua_pushlstring(L, buffer, encode_sz);
-	return buffer;
+	//return buffer;
 }
 
 static inline int
@@ -844,9 +844,9 @@ b64index(uint8_t c) {
 	return decoding[c];
 }
 
-char *
-Crypt::base64decode(const uint8_t * text) {
-	size_t sz = sizeof(*text);
+void
+Crypt::base64decode(const uint8_t * text,char *out) {
+	size_t sz = 8;
 	//const uint8_t * text = (const uint8_t *)luaL_checklstring(L, 1, &sz);
 	int decode_sz = (sz + 3) / 4 * 3;
 	char tmp[SMALL_CHUNK];
@@ -862,7 +862,7 @@ Crypt::base64decode(const uint8_t * text) {
 		for (j = 0; j<4;) {
 			if (i >= sz) {
 				//return luaL_error(L, "Invalid base64 text");
-				throw("Invalid base64 text");
+				//throw("Invalid base64 text");
 			}
 			c[j] = b64index(text[i]);
 			if (c[j] == -1) {
@@ -879,9 +879,9 @@ Crypt::base64decode(const uint8_t * text) {
 		switch (padding) {
 		case 0:
 			v = (unsigned)c[0] << 18 | c[1] << 12 | c[2] << 6 | c[3];
-			buffer[output] = v >> 16;
-			buffer[output + 1] = (v >> 8) & 0xff;
-			buffer[output + 2] = v & 0xff;
+			out[output] = v >> 16;
+			out[output + 1] = (v >> 8) & 0xff;
+			out[output + 2] = v & 0xff;
 			output += 3;
 			break;
 		case 1:
@@ -890,17 +890,17 @@ Crypt::base64decode(const uint8_t * text) {
 				throw("Invalid base64 text");
 			}
 			v = (unsigned)c[0] << 10 | c[1] << 4 | c[2] >> 2;
-			buffer[output] = v >> 8;
-			buffer[output + 1] = v & 0xff;
+			out[output] = v >> 8;
+			out[output + 1] = v & 0xff;
 			output += 2;
 			break;
 		case 2:
 			if (c[3] != -2 || c[2] != -2 || (c[1] & 0xf) != 0) {
 				//return luaL_error(L, "Invalid base64 text");
-				throw("Invalid base64 text");
+				//throw("Invalid base64 text");
 			}
 			v = (unsigned)c[0] << 2 | c[1] >> 4;
-			buffer[output] = v;
+			out[output] = v;
 			++output;
 			break;
 		default:
@@ -909,5 +909,5 @@ Crypt::base64decode(const uint8_t * text) {
 		}
 	}
 	//lua_pushlstring(L, buffer, output);
-	return buffer;
+	//return buffer;
 }

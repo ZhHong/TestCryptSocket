@@ -19,8 +19,8 @@ public:
 	static char * hmac64(uint32_t x[2], uint32_t y[2]);
 	static void dhexchange(char *x);
 	static void dhsecret(char *pubkey, char *prikey, char * secret);
-	static char * base64encode(const uint8_t *text);
-	static char * base64decode(const uint8_t * text);
+	static void base64encode(const uint8_t *text,char *out);
+	static void base64decode(const uint8_t * text,char *out);
 };
 #endif
 

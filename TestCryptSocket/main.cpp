@@ -3,6 +3,13 @@
 #include <iostream>
 #include <string>
 #include <assert.h>
+
+#include <WinSock2.h>
+#define MSGSIZE 1024
+#define SERVER_ADDRESS "127.0.0.1"
+#define PORT           5188
+#pragma comment(lib,"ws2_32.lib")
+
 using namespace std;
 //aes
 static const unsigned char sbox[256] = {
@@ -304,12 +311,18 @@ int main(void) {
 	Crypt::randomkey(prikey);
 	Crypt::dhexchange(pubkey);
 
+	char b64prikey[8];
+	char b64pubkey[8];
+	Crypt::base64encode((const uint8_t *)prikey, b64prikey);
+	Crypt::base64encode((const uint8_t *)pubkey, b64pubkey);
+
 	char prikey1[8];
 	char pubkey1[8];
 	Crypt::randomkey(prikey1);
 	Crypt::dhexchange(pubkey1);
 	char secret1[8];
 	char secret2[8];
+
 	Crypt::dhsecret(pubkey1, prikey, secret1);
 	Crypt::dhsecret(pubkey, prikey1, secret2);
 	char out1[17];
@@ -329,5 +342,54 @@ int main(void) {
 	}
 
 	system("pause");
+
+	WSADATA wsaData;
+	SOCKET sclient;
+	SOCKADDR_IN server;
+	char szMessage[MSGSIZE];
+	int ret;
+	// Initialize Windows socket library
+	WSAStartup(0x0202, &wsaData);
+	//create client socket
+	sclient = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	// Connect to server
+	memset(&server, 0, sizeof(SOCKADDR_IN));
+	server.sin_family = AF_INET;
+	server.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDRESS);
+	server.sin_port = htons(PORT);
+	connect(sclient, (struct sockaddr *)&server, sizeof(SOCKADDR_IN));
+	//while connet get changelle
+	char changelle[MSGSIZE];
+	ret = recv(sclient, changelle, MSGSIZE, 0); //5FpsARFeNy8 =
+	
+	char prikey_c[8];
+	char pubkey_c[8];
+	Crypt::randomkey(prikey);
+	Crypt::dhexchange(pubkey);
+	send(sclient, pubkey_c, strlen(prikey_c), 0);
+	char server_key[MSGSIZE];
+	ret = recv(sclient, server_key, strlen(server_key), 0);
+
+	char secret_s[17];
+	char out3[17];
+	Crypt::dhsecret(server_key, prikey_c, secret_s);
+	Crypt::hexencode((const uint8_t *)secret_s, out3);
+	out3[16] = '\0';
+	std::string s3 = (string)out3;
+	//
+	//while (TRUE)
+	//{
+	//	printf("Send:");
+	//	gets(szMessage);
+	//	// Send message
+	//	send(sclient, szMessage, strlen(szMessage), 0);
+	//	// Receive message
+	//	ret = recv(sclient, szMessage, MSGSIZE, 0);
+	//	szMessage[ret] = '\0';
+	//	printf("Received [%d bytes]: '%s'\n", ret, szMessage);
+	//}
+	// Clean up
+	closesocket(sclient);
+	WSACleanup();
 	return 0;
 }
