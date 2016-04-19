@@ -6,7 +6,7 @@
 
 #include <WinSock2.h>
 #define MSGSIZE 1024
-#define SERVER_ADDRESS "127.0.0.1"
+#define SERVER_ADDRESS "192.168.136.128"
 #define PORT           5188
 #pragma comment(lib,"ws2_32.lib")
 
@@ -306,8 +306,8 @@ int main(void) {
 	//printf("\n"); printf("\n");
 
 	//scanf("%s", key);
-	char prikey[8];
-	char pubkey[8];
+	char prikey[16];
+	char pubkey[16];
 	Crypt::randomkey(prikey);
 	Crypt::dhexchange(pubkey);
 
@@ -315,6 +315,11 @@ int main(void) {
 	char b64pubkey[8];
 	Crypt::base64encode((const uint8_t *)prikey, b64prikey);
 	Crypt::base64encode((const uint8_t *)pubkey, b64pubkey);
+
+	char deb64prikey[8];
+	char deb64pubkey[8];
+	Crypt::base64decode((const uint8_t *)b64prikey, deb64prikey);
+	Crypt::base64decode((const uint8_t *)b64pubkey, deb64pubkey);
 
 	char prikey1[8];
 	char pubkey1[8];
@@ -361,14 +366,20 @@ int main(void) {
 	//while connet get changelle
 	char changelle[MSGSIZE];
 	ret = recv(sclient, changelle, MSGSIZE, 0); //5FpsARFeNy8 =
-	
+	char b64changelle[16];
+	Crypt::base64decode((const uint8_t *)changelle, b64changelle);
+
 	char prikey_c[8];
 	char pubkey_c[8];
-	Crypt::randomkey(prikey);
-	Crypt::dhexchange(pubkey);
-	send(sclient, pubkey_c, strlen(prikey_c), 0);
+	Crypt::randomkey(prikey_c);
+	Crypt::dhexchange(pubkey_c);
+	char b64pubkey_c[16];
+	Crypt::base64encode((const uint8_t *)pubkey_c, b64pubkey_c);
+	int l=send(sclient, b64pubkey_c, strlen(b64pubkey_c), 0);
 	char server_key[MSGSIZE];
 	ret = recv(sclient, server_key, strlen(server_key), 0);
+	char deb64pubkey_c[16];
+	Crypt::base64decode((const uint8_t *)server_key, deb64pubkey_c);
 
 	char secret_s[17];
 	char out3[17];

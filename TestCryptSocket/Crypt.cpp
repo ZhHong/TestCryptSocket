@@ -846,7 +846,7 @@ b64index(uint8_t c) {
 
 void
 Crypt::base64decode(const uint8_t * text,char *out) {
-	size_t sz = 8;
+	size_t sz = 16;
 	//const uint8_t * text = (const uint8_t *)luaL_checklstring(L, 1, &sz);
 	int decode_sz = (sz + 3) / 4 * 3;
 	char tmp[SMALL_CHUNK];
