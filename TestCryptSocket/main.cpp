@@ -7,6 +7,7 @@
 #include <WinSock2.h>
 #define MSGSIZE 1024
 #define SERVER_ADDRESS "192.168.136.128"
+#define WORK_SERVER_ADDRESS "127.0.0.1"
 #define PORT           5188
 #pragma comment(lib,"ws2_32.lib")
 
@@ -306,47 +307,47 @@ int main(void) {
 	//printf("\n"); printf("\n");
 
 	//scanf("%s", key);
-	char prikey[16];
-	char pubkey[16];
-	Crypt::randomkey(prikey);
-	Crypt::dhexchange(pubkey);
+	//char prikey[16];
+	//char pubkey[16];
+	//Crypt::randomkey(prikey);
+	//Crypt::dhexchange(pubkey);
 
-	char b64prikey[8];
-	char b64pubkey[8];
-	Crypt::base64encode((const uint8_t *)prikey, b64prikey);
-	Crypt::base64encode((const uint8_t *)pubkey, b64pubkey);
+	//char b64prikey[8];
+	//char b64pubkey[8];
+	//Crypt::base64encode((const uint8_t *)prikey, b64prikey);
+	//Crypt::base64encode((const uint8_t *)pubkey, b64pubkey);
 
-	char deb64prikey[8];
-	char deb64pubkey[8];
-	Crypt::base64decode((const uint8_t *)b64prikey, deb64prikey);
-	Crypt::base64decode((const uint8_t *)b64pubkey, deb64pubkey);
+	//char deb64prikey[8];
+	//char deb64pubkey[8];
+	//Crypt::base64decode((const uint8_t *)b64prikey, deb64prikey);
+	//Crypt::base64decode((const uint8_t *)b64pubkey, deb64pubkey);
 
-	char prikey1[8];
-	char pubkey1[8];
-	Crypt::randomkey(prikey1);
-	Crypt::dhexchange(pubkey1);
-	char secret1[8];
-	char secret2[8];
+	//char prikey1[8];
+	//char pubkey1[8];
+	//Crypt::randomkey(prikey1);
+	//Crypt::dhexchange(pubkey1);
+	//char secret1[8];
+	//char secret2[8];
 
-	Crypt::dhsecret(pubkey1, prikey, secret1);
-	Crypt::dhsecret(pubkey, prikey1, secret2);
-	char out1[17];
-	char out2[17];
-	Crypt::hexencode((const uint8_t *)secret1, out1);
-	Crypt::hexencode((const uint8_t *)secret2, out2);
-	//assert(secret1 == secret2);
-	out1[16] = '\0';
-	out2[16] = '\0';
-	std::string s1 = (string)out1;
-	std::string s2 = (string)out2;
-	
-	printf("secret 1 %s\n", s1);
-	printf("secret 2 %s\n", s2);
-	if (s1 == s2) {
-		printf("secret match %s\n",secret1);
-	}
+	//Crypt::dhsecret(pubkey1, prikey, secret1);
+	//Crypt::dhsecret(pubkey, prikey1, secret2);
+	//char out1[17];
+	//char out2[17];
+	//Crypt::hexencode((const uint8_t *)secret1, out1);
+	//Crypt::hexencode((const uint8_t *)secret2, out2);
+	////assert(secret1 == secret2);
+	//out1[16] = '\0';
+	//out2[16] = '\0';
+	//std::string s1 = (string)out1;
+	//std::string s2 = (string)out2;
+	//
+	//printf("secret 1 %s\n", s1);
+	//printf("secret 2 %s\n", s2);
+	//if (s1 == s2) {
+	//	printf("secret match %s\n",secret1);
+	//}
 
-	system("pause");
+	//system("pause");
 
 	WSADATA wsaData;
 	SOCKET sclient;
@@ -360,7 +361,7 @@ int main(void) {
 	// Connect to server
 	memset(&server, 0, sizeof(SOCKADDR_IN));
 	server.sin_family = AF_INET;
-	server.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDRESS);
+	server.sin_addr.S_un.S_addr = inet_addr(WORK_SERVER_ADDRESS);
 	server.sin_port = htons(PORT);
 	connect(sclient, (struct sockaddr *)&server, sizeof(SOCKADDR_IN));
 	//while connet get changelle
@@ -402,5 +403,6 @@ int main(void) {
 	// Clean up
 	closesocket(sclient);
 	WSACleanup();
+	system("pause");
 	return 0;
 }
