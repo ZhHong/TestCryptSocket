@@ -24,12 +24,27 @@
     <ClCompile Include="NetWork.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ODSocket.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypt.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="NetWork.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ODSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Message.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

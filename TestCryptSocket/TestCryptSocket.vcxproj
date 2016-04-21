@@ -144,11 +144,16 @@
   <ItemGroup>
     <ClCompile Include="Crypt.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Message.cpp" />
     <ClCompile Include="NetWork.cpp" />
+    <ClCompile Include="ODSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypt.h" />
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="Message.h" />
     <ClInclude Include="NetWork.h" />
+    <ClInclude Include="ODSocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
