@@ -4,6 +4,11 @@
 #include <vector>
 class Message
 {
+typedef struct
+{
+	int data_len;
+	char data[0];
+}buffer;
 public:
 	Message();
 	~Message();
@@ -12,6 +17,7 @@ public:
 	void getHexStr();
 	void setMessage(std::vector<unsigned int>);
 	void resetMessage();
+	void newMessage();
 private:
 	std::vector<unsigned int> original;
 	int msgType;

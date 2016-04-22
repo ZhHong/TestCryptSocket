@@ -18,6 +18,10 @@ void Message::setMessage(std::vector<unsigned int> orig_data) {
 		Message::original.push_back(orig_data[i]);
 	}
 }
+void Message::newMessage()
+{
+
+}
 void Message::getOriginalStr() {
 
 }

@@ -11,8 +11,70 @@
 #define PORT           5188
 
 using namespace std;
+typedef struct
+{
+	int data_len;
+	char data[0];
+}buffer1;
+typedef struct
+{
+	int data_len;
+	char * data;
+}buffer2;
+typedef struct
+{
+	int data_len;
+	char data[];
+}buffer3;
+
+typedef struct
+{
+	uint32_t id;
+	uint32_t age;
+}student;
 
 int main(void) {
+	printf("sizeof(buffer1)====%u\n",sizeof(buffer1));
+	printf("sizeof(buffer2)====%u\n", sizeof(buffer2));
+	printf("sizeof(buffer3)====%u\n", sizeof(buffer3));
+
+
+	student *stu = (student *)malloc(sizeof(student));
+	stu->id = 10000;
+	stu->age = 12;
+
+	student *temp = NULL;
+
+	buffer1 *buff1 = (buffer1 *)malloc(sizeof(student) + sizeof(buffer1));
+	buff1->data_len = sizeof(student);
+	memcpy(buff1->data, stu, buff1->data_len);
+	printf("buff1 address:%p,data_len address:%p, buff1.data address:%p\n", &buff1, &(buff1->data_len), (buff1->data));
+	temp = (student *)buff1->data;
+	printf("student id:%u,age:%u\n", temp->id, temp->age);
+
+	buffer2 *buff2 = (buffer2 *)malloc(sizeof(buffer2));
+	buff2->data_len = sizeof(student);
+	buff2->data = (char *)malloc(buff2->data_len);
+	memcpy(buff2->data, stu, buff2->data_len);
+	printf("buff2 address:%p,data_len address:%p, buff2.data address:%p\n", &buff2, &(buff2->data_len), (buff2->data));
+	temp = (student*)buff2->data;
+	printf("student id:%u,age:%u\n", temp->id, temp->age);
+
+	buffer3 *buff3 = (buffer3*)malloc(sizeof(buffer3) + sizeof(student));
+	buff3->data_len = sizeof(student);
+	memcpy(buff3->data, stu, buff3->data_len);
+	printf("buff3 address:%p,data_len address:%p, buff3data address:%p\n", &buff3, &(buff3->data_len), (buff3->data));
+	temp = (student *)buff3->data;
+	printf("student id:%u,age:%u\n", temp->id, temp->age);
+
+	free(buff1);
+
+	free(buff2->data);
+	free(buff2);
+
+	free(buff3);
+	free(stu);
+
 	ODSocket odsc;
 	bool a = odsc.Connect(WORK_SERVER_ADDRESS, PORT);
 	if (!a){
