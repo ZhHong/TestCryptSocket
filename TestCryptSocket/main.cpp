@@ -130,9 +130,11 @@ int main(void) {
 		for (int j = 0; j < sec_len; j++){
 			useServerkey[j] = server_public_key[j + 2];
 		}
-		Crypt::dhsecret(useServerkey, private_key, secret);
+		Crypt::dhsecret(base64_server_public_key, private_key, secret);
 		char out[16];
 		Crypt::hexencode((const uint8_t *)secret, out);
+		char out2[16];
+		Crypt::base64encode((const uint8_t *)out, out2);
 		//crypt chanllage
 
 		//send chanllage
