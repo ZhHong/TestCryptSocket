@@ -76,12 +76,12 @@ int main(void) {
 	free(stu);
 
 	ODSocket odsc;
-	bool a = odsc.Connect(WORK_SERVER_ADDRESS, PORT);
+	bool a = odsc.Connect(SERVER_ADDRESS, PORT);
 	if (!a){
-		printf("connect %s:%d field!\n", WORK_SERVER_ADDRESS, PORT);
+		printf("connect %s:%d field!\n", SERVER_ADDRESS, PORT);
 	}
 	else{
-		printf("connect %s:%d success!\n", WORK_SERVER_ADDRESS, PORT);
+		printf("connect %s:%d success!\n", SERVER_ADDRESS, PORT);
 		//connect success get server chanlllage
 		char chanllage[MSGSIZE];
 		int lenr1 = odsc.Recv(chanllage, strlen(chanllage), 0);
@@ -110,7 +110,7 @@ int main(void) {
 			senddata[i] = base64_public_key[i - 2];
 		}
 		//send public key to server
-		int lens1 = odsc.Send(senddata, strlen(base64_public_key), 0);
+		int lens1 = odsc.Send(senddata, 14, 0);
 		
 		//revice server public key
 		char server_public_key[MSGSIZE];
@@ -134,7 +134,7 @@ int main(void) {
 		char out[16];
 		Crypt::hexencode((const uint8_t *)secret, out);
 		char out2[16];
-		Crypt::base64encode((const uint8_t *)out, out2);
+		Crypt::base64encode((const uint8_t *)secret, out2);
 		//crypt chanllage
 
 		//send chanllage
