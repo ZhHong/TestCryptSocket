@@ -147,6 +147,9 @@
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="NetWork.cpp" />
     <ClCompile Include="ODSocket.cpp" />
+    <ClCompile Include="Pocket.cpp" />
+    <ClCompile Include="Queue.cpp" />
+    <ClCompile Include="TcpMsg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypt.h" />
@@ -154,6 +157,9 @@
     <ClInclude Include="Message.h" />
     <ClInclude Include="NetWork.h" />
     <ClInclude Include="ODSocket.h" />
+    <ClInclude Include="Pocket.h" />
+    <ClInclude Include="Queue.h" />
+    <ClInclude Include="TcpMsg.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
